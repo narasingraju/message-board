@@ -37,13 +37,11 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'will_paginate', '~> 3.1.0'
-group :production do
-  gem 'mysql2', '>= 0.3.13', '< 0.5'
-end
 
 #add assets gem for rails for heroku production
 group :production do
   gem 'rails_12factor'
+  gem 'pg'
 end
 
 #rails4 aseets file
