@@ -18,3 +18,9 @@
 //= require ckeditor/init
 
 //= require_tree .
+
+$(document).ready(function(){
+  for (instance in CKEDITOR.instances){
+    CKEDITOR.config.height = '100px';
+  }
+});
