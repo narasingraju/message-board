@@ -6,6 +6,7 @@
           <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'btn btn-md btn-default logout'  %>
           <%= link_to "Create Post", new_post_path, :class => 'btn btn-md btn-default '  %>
           <%= link_to "Posts", posts_path, :class => 'btn btn-md btn-default', method: :get %>
+          <%= link_to "Edit Profile", edit_user_registration_path, :class => 'btn btn-md btn-default', method: :get %>
           <% else %>
           <% end %>
         <div class="header-right">

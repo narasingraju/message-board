@@ -1,0 +1,70 @@
+%link{:href => "http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css", :rel => "stylesheet"}/
+.container
+  = search_form_for @search, url: search_posts_path, method: :get do |f|
+    .row
+      .col-md-4
+        = f.search_field :desc_or_title_cont, class: "form-control search-box1 search-input1", :placeholder=>"Search post by description or title"
+        = f.select :user_id_eq, options_for_select(User.all.collect { | user | [user.name, user.id] }), {:include_blank => "please select a user"}, { class: 'form-control'}
+        = f.submit "Search", class: "btn btn-success margin-top-16"
+        = sort_link @search, :title, "Sort By Title", method: :get
+        = link_to "Create Post", new_post_path, :class=>"btn btn-primary margin-top-16"
+      - if params[:q]
+        = link_to "Back to posts", posts_path, :class=>"btn btn-primary create-btn", method: :get
+      - if @posts.count == 0
+        %h5 Please create your first post
+    - @posts.each do |post|
+      .media
+        %a.pull-left{:href => "#"}
+          - if post.user != nil && post.user.avatar?
+            %img.media-object{:src => post.user.avatar.url, :style => "height:150px; width:150px;"}/
+          - else
+            %img.media-object{:src => "http://placehold.it/150x150"}/
+        .media-body
+          %h4.media-heading= post.title
+          %p.text-right{:style => "color:black"}
+            Posted By: #{post.user.name if post.user != nil}
+          %p.text-right{:style => "color:black"}
+            Published on: #{post.created_at}
+          %p.postdesc= raw(post.desc)
+          %ul.list-inline.list-unstyled
+            %li
+              %span
+                %i.glyphicon.glyphicon-calendar
+                = time_ago_in_words(post.created_at)
+            %li |
+            %span
+              %i.glyphicon.glyphicon-comment
+              = post.comments.count
+              comments
+            %li |
+            %span
+              %i.glyphicon.glyphicon-comment
+              = post.likes.count
+              Likes
+            %li |
+            %span
+              %i.glyphicon.glyphicon-comment
+              - @liked_or_not =  Like.where(:user_id => current_user.id, :post_id => post.id).present?
+              - #end
+          .row
+            .col-md-1
+              = link_to "View post", post_path(post), :class => "btn btn-sm btn-info"
+            - if post.user != nil
+              - if post.user.id == current_user.id
+                .col-md-1
+                  - a = Time.now.to_time
+                  - b = post.updated_at.to_time
+                  - c = a - b
+                  - d = (c / 3600).to_i
+                  - if d <= 1
+                    = link_to "Edit Post", edit_post_path(post), :class => "btn btn-sm btn-primary pull-left"
+            - if post.user != nil
+              - if post.user.id == current_user.id
+                .col-md-1.pull-left
+                  = link_to 'Delete Post', post, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-sm btn-danger pull-left"
+    = will_paginate @posts, class: "pagination", method: :get
+    %br/
+    %br/
+    %br/
+    %br/
+    %br/
