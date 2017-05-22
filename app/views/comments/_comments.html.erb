@@ -1,0 +1,10 @@
+<% unless post.comments.empty? %>
+  <h3>
+    <%= pluralize(post.comments.size, 'comment') %>
+  </h3>
+  <div class="panel panel-default">
+    <% for comment in post.comments %>
+      <%= render "comments/comment", { comment: comment } %>
+    <% end %>
+  </div>
+<% end %>

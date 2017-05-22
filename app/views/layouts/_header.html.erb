@@ -1,0 +1,16 @@
+<div id="header">
+  <div id="logo"> <span class=""><h4 class="messagetext">Message board</h4></span><span class="posts"></span> </div>
+      <div class="container">
+          <% if user_signed_in? %>
+            Logged in as <strong><%= current_user.email %></strong>.
+          <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'btn btn-md btn-default logout'  %>
+          <%= link_to "Create Post", new_post_path, :class => 'btn btn-md btn-default '  %>
+          <%= link_to "Posts", posts_path, :class => 'btn btn-md btn-default', method: :get %>
+          <% else %>
+          <% end %>
+        <div class="header-right">
+            <span class="profile-icon"></span>
+        </div>
+      </div>
+  </div>
+</div>

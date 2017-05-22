@@ -1,0 +1,6 @@
+<%= binding.pry %>
+<%= form_for @comment do |f| %>
+  <%= f.label :comment, "Title" %>
+  <%= f.text_field :comment, placeholder: "Write a comment" %>
+  <%= f.submit "Submit" %>
+<% end %>

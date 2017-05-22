@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"/>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+    <%= search_form_for @search, url: search_posts_path, method: :get do |f| %>
+    <%= f.search_field :desc_or_title_cont, class: "form-control search-box search-input", :placeholder=>"Search post by description or title" %>
+    
+  </div>
+    <%= f.submit "Search", class: "search-btn btn btn-md btn-success seacrhdesc" %>
+   
+  </div>
+<div class="userselect">
+      <%= f.select :user_id_eq, options_for_select(User.all.collect { | user | [user.name, user.id] }), {:include_blank => "please select a user"}, {} %>
+    </div>
+    <%= sort_link @search, :title, "Sort By Title", method: :get %>
+    <%= link_to "Create Post", new_post_path, :class=>"btn btn-primary create-btn btn-md"%>
+<% end %>
+
+
+</div>
+
+
+
+  
+  <h3>&nbsp;</h3>
+  <% if params[:q]%>
+    <%= link_to "Back to posts", posts_path, :class=>"btn btn-primary create-btn", method: :get %>
+  <% end %>
+  <%if @posts.count == 0 %>
+   <h5> Please create your first post </h5>
+  <% end %>
+  <% @posts.each do |post|%>
+      <div class="media">
+        <a class="pull-left" href="#">
+           <% if post.user != nil && post.user.avatar? %>
+              <img class="media-object" src="<%= post.user.avatar.url%>"  style= "height:150px; width:150px;" >
+            <% else %>
+              <img class="media-object" src="http://placehold.it/150x150">
+            <% end %>
+      </a>
+        <div class="media-body">
+          <h4 class="media-heading"><%= post.title %></h4>
+            <p class="text-right" style="color:black">Posted By: <%= post.user.name if post.user != nil %></p>
+            <p class="text-right" style="color:black">Published on: <%= post.created_at %></p>
+            <p class="postdesc"><%= raw(post.desc) %></p>
+            <ul class="list-inline list-unstyled">
+              <li><span><i class="glyphicon glyphicon-calendar"></i> <%= time_ago_in_words(post.created_at) %></span></li>
+              <li>|</li>
+              <span><i class="glyphicon glyphicon-comment"></i> <%= post.comments.count%> comments</span>  
+              <li>|</li>  
+              <span><i class="glyphicon glyphicon-comment"></i> <%= post.likes.count%> Likes</span>
+              <li>|</li>  
+              <span><i class="glyphicon glyphicon-comment"></i>
+                <% @liked_or_not =  Like.where(:user_id => current_user.id, :post_id => post.id).present? %>
+                <%# if @liked_or_not == true %>
+                   
+                  <%# else %>  
+                    <%#= link_to "Like", likepost_posts_path(:post_id => post.id) %>
+                  <% #end %> 
+              </span>  
+            </ul>
+            <div  class="row">
+              <div class="col-md-1">
+                <%= link_to "View post", post_path(post), :class => "btn btn-sm btn-info" %>
+              </div>
+              <% if post.user != nil %>
+                  <% if post.user.id == current_user.id %>
+                    <div class="col-md-1">
+                      <% a = Time.now.to_time %>
+                      <% b = post.updated_at.to_time%>
+                      <% c = a - b %>
+                      <% d = (c / 3600).to_i%>
+                      <% if d <= 1%>
+                        <%= link_to "Edit Post", edit_post_path(post), :class => "btn btn-sm btn-primary pull-left" %>
+                        <% end %>
+                    </div>
+                  <% end %>
+              <% end %>
+              <% if post.user != nil %>
+                   <% if post.user.id == current_user.id %>
+                  <div class="col-md-1 pull-left">
+                    <%= link_to 'Delete Post', post, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-sm btn-danger pull-left" %>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+            
+        </div>
+    </div>
+  <% end %>
+<%= will_paginate @posts, class: "pagination", method: :get %><br /><br /><br /><br /><br />
+
+  <%#= paginate @posts, :theme => 'twitter-bootstrap-3', method: :get %>

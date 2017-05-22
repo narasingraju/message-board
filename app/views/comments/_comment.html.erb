@@ -1,0 +1,18 @@
+<div class="panel-heading">
+  <div class="row">
+    <div class="pull-left col-md-8">
+      <b>
+        <%#= comment.user.name %>
+      </b>
+      @ #{comment.updated_at.strftime('%b %d, %Y %H:%M:%S')}
+      <div class="destroy_errors alert alert-info fade in hide"></div>
+    </div>
+  </div>
+</div>
+<div class="panel-body">
+  <div class="row well-sm">
+    <div class="col-md-12 comments_data">
+      <%= simple_format comment.comment %>
+    </div>
+  </div>
+</div>
